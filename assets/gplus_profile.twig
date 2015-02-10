@@ -1,0 +1,56 @@
+{# GOOGLE PLUS PROFILE OBJECT
+   ==========================
+  status (bool)
+  record:
+    - kind: "plus#person"
+    - etag
+    - nickname
+    - occupation
+    - skills
+    - gender
+    - urls:
+        - 0:
+            - value
+            - type
+            - label
+    - objectType: "person"
+    - id
+    - displayName
+    - name:
+        - familyName
+        - givenName
+    - tagline
+    - aboutMe
+    - relationshipStatus
+    - url
+    - image
+        - url
+        - isDefault (bool)
+    - organisations:
+        - 0
+            - name
+            - title
+            - type
+            - startDate
+            - endDate
+            - primary
+    - isPlusUser (bool)
+    - circledByCount (int)
+    - verified (bool)
+    - cover
+        - layout
+        - coverPhoto:
+            - url
+            - height (int)
+            - width (int)
+        - coverInfo:
+            - topImageOffset (int)
+            - leftImageOffset (int)
+#}
+{% if status is same as(true) %}
+<h5>{{ record.displayName }}</h5>
+<img src="{{ record.image.url }}" alt="{{ record.displayName }}" />
+<a href="{{ record.url }}" title="{{ __('Profile') }}">{{ __('Profile') }}</a>
+{% else %}
+{{ record }}
+{% endif %}

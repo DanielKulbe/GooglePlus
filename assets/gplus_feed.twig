@@ -1,0 +1,75 @@
+{# GOOGLE PLUS STREAM OBJECT
+   =========================
+  status (bool)
+  record:
+    - kind: plus#activityFeed
+    - etag
+    - nextPageToken
+    - title
+    - updated
+    - items:
+        - 0:
+            - kind: plus#activity
+            - etag
+            - title
+            - published
+            - updated
+            - id
+            - url
+            - actor:
+                - id
+                - displayName
+                - url
+                - image:
+                    -url
+            - verb
+            - object:
+                - objectType
+                - content
+                - url
+                - replies:
+                    - totalItems
+                    - selfLink
+                - plusoners:
+                    - totalItems
+                    - selfLink
+                - reshares:
+                    - totalItems
+                    - selfLink
+                - attachments:
+                    - 0:
+                        - objectType
+                        - displayName
+                        - content
+                        - url
+                        - image:
+                            - url
+                            - type
+                            - height
+                            - width
+                        - fullImage:
+                            - url
+                            - type
+            - provider:
+                - title
+            - access:
+                - kind
+                - description
+                - items:
+                    - 0:
+                        - type
+#}
+{% if status is same as(true) %}
+<ul>
+    {% for post in record.items %}
+    <li>
+        <h5>{{post.title}}</h5>
+        <p>{{ post.object.content|raw }}</p>{# prevent excaping, may contain html #}
+        <p><small>{{ __('Published on:') }} {{ post.published|localdate('%c') }}</small></p>
+        <a href="{{post.url}}" title="{{ __('Read more') }}">{{ __('Read more') }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+{{ record }}
+{% endif %}

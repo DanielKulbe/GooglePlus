@@ -1,0 +1,29 @@
+{
+    "name": "umbrielsama/googleplus",
+    "description": "Display your public Google+ activity and a profile information on your website.",
+    "type": "bolt-extension",
+    "keywords": [
+        "google", "feed", "activity", "social", "profile"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Kulbe",
+            "email": "info@daniel-kulbe.de"
+        }
+    ],
+    "require": {
+        "bolt/bolt": ">=2.0.0,<3.0.0"
+    },
+    "autoload": {
+        "files": [
+            "init.php"
+        ],
+        "psr-4": {
+            "Bolt\\Extension\\Umbrielsama\\GooglePlus\\": ""
+        }
+    },
+    "extra": {
+        "bolt-assets": "assets"
+    }
+}

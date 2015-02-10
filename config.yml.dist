@@ -1,0 +1,25 @@
+# Visit https://console.developers.google.com and create a new application.
+# In the Services tab, flip the Google Analytics switch (on).
+# In the API Access tab, click Create an Server Key:
+#   - select the IPs you want to grant access or leave empty for <all>
+app_developer_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Enable caching of requests
+cache: true
+
+# Enable file (image) attachment uploads (e.g. to create thumbnail)
+files: false
+
+# Directory name for file uploads "/files/%filedir%"
+# filedir: googleplus
+
+# Profile widget
+profile:
+  user: YOUR_GOGLE_PLUS_ID
+  template: gplus_profile.twig
+
+# Activity widget
+activity:
+  user: YOUR_GOGLE_PLUS_ID
+  results: 10
+  template: gplus_feed.twig
