@@ -1,7 +1,7 @@
 <?php
 // Google+ extension for Bolt
 
-namespace Bolt\Extension\Umbrielsama\GooglePlus;
+namespace Bolt\Extension\DanielKulbe\GooglePlus;
 
 use Bolt\Application;
 use Bolt\BaseExtension;
@@ -223,7 +223,7 @@ class Extension extends BaseExtension
     {
         $export = array(
             'status' => false,
-            'record' => "Edit 'config.yml' to set up your Google API developer key."
+            'record' => "Edit 'config.yml' to set up your Google API developer key or OAuth2 access."
         );
 
         // Google+ API Public access

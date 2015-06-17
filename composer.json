@@ -1,5 +1,5 @@
 {
-    "name": "umbrielsama/googleplus",
+    "name": "danielkulbe/googleplus",
     "description": "Display your public Google+ activity and a profile information on your website.",
     "type": "bolt-extension",
     "keywords": [
@@ -20,7 +20,7 @@
             "init.php"
         ],
         "psr-4": {
-            "Bolt\\Extension\\Umbrielsama\\GooglePlus\\": ""
+            "Bolt\\Extension\\DanielKulbe\\GooglePlus\\": ""
         }
     },
     "extra": {
