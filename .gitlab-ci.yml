@@ -3,8 +3,5 @@ daniel-kulbe.de:
   only:
     - tags
   script:
-    - 'export'
-    - 'echo $DEPLOY_PATH'
-    - 'echo "test: ${DEPLOY_PATH}"'
-    - 'sudo "${SCRIPT_BASE}git-submodule.sh" --git_path="${DEPLOY_PATH}" --git_log="${DEPLOY_LOG}"'
-    - 'sudo "${SCRIPT_BASE}bolt-permissions.sh" --bolt_path="${DEPLOY_PATH}" --bolt_user="${DEPLOY_USER}" --httpd_group="${DEPLOY_USER}" --logfile="${DEPLOY_LOG}"'
+    - 'sudo sh "${SCRIPT_BASE}git-submodule.sh" --git_path="${DEPLOY_PATH}" --git_log="${DEPLOY_LOG}"'
+    - 'sudo sh "${SCRIPT_BASE}bolt-permissions.sh" --bolt_path="${DEPLOY_PATH}" --bolt_user="${DEPLOY_USER}" --httpd_group="${DEPLOY_USER}" --logfile="${DEPLOY_LOG}"'
