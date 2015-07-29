@@ -3,9 +3,8 @@ types:
 
 daniel-kulbe.de:
   type: deploy
-  only: 
-    - tags
+  only:
     - /^v\d{1,2}\.\d{1,2}\.\d{1,2}$/i
   script:
-    - sudo ${SCRIPT_BASE}git-submodule.sh --git_path="${DEPLOY_PATH}" --git_log="${DEPLOY_LOG}"
-    - sudo ${SCRIPT_BASE}bolt-permissions.sh --bolt_path="${DEPLOY_PATH}" --bolt_user="${DEPLOY_USER}" --httpd_group="${DEPLOY_USER}" --logfile="${DEPLOY_LOG}"
+    - sudo bash "${SCRIPT_BASE}git-submodule.sh" --git_path="${DEPLOY_PATH}" --git_log="${DEPLOY_LOG}"
+    - sudo bash "${SCRIPT_BASE}bolt-permissions.sh" --bolt_path="${DEPLOY_PATH}" --bolt_user="${DEPLOY_USER}" --httpd_group="${DEPLOY_USER}" --logfile="${DEPLOY_LOG}"
