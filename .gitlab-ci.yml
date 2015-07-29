@@ -3,6 +3,7 @@ daniel-kulbe.de:
   only:
     - tags
   script:
+    - echo $CI_BUILD_ID
     - echo $DEPLOY_PATH
     - echo "test: ${DEPLOY_PATH}"
     - sudo /var/www/webhook/git-submodule.sh --git_path="${DEPLOY_PATH}" --git_log="${DEPLOY_LOG}"
