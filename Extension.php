@@ -148,7 +148,7 @@ class Extension extends BaseExtension
             Extension::$fileFormats,
             true
         )) {
-            $this->app['log']->add("saveFile: remote file '$url' has an invalid format.", 2);
+            $this->app['logger.system']->warning("[GooglePlus]: saveFile() remote file '{$url}' has an invalid format.", ['event' => 'extension']);
         } else {
             $basename = sprintf('/%s/%s', $this->config['filedir'], hash('sha1', $url).$ext);
             $filename = sprintf(
@@ -169,11 +169,11 @@ class Extension extends BaseExtension
             if (is_writable(dirname($filename))) {
                 // Yes, we can create the file!
                 $fileSystem->copy($url, $filename, true); // true: make sure, we overwrite an existing old file
-                $this->app['log']->add("saveFile: copied file '$url' as '$basename'.", 2);
+                $this->app['logger.system']->info("[GooglePlus]: saveFile() copied file '{$url}' as '{$basename}'.", ['event' => 'extension']);
                 return $basename;
             }
 
-            $this->app['log']->add("saveFile: couldn't write '$url' as '$filename'.", 2);
+            $this->app['logger.system']->warning("[GooglePlus]: saveFile() couldn't write '{$url}' as '{$filename}'.", ['event' => 'extension']);
         }
         return $url;
     }
