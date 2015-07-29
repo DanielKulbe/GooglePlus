@@ -3,5 +3,7 @@ daniel-kulbe.de:
   only:
     - tags
   script:
+    - echo $DEPLOY_PATH
+    - echo "test: ${DEPLOY_PATH}"
     - sudo /var/www/webhook/git-submodule.sh --git_path="${DEPLOY_PATH}" --git_log="${DEPLOY_LOG}"
     - sudo /var/www/webhook/bolt-permissions.sh --bolt_path="${DEPLOY_PATH}" --bolt_user="${DEPLOY_USER}" --httpd_group="${DEPLOY_USER}" --logfile="${DEPLOY_LOG}"
