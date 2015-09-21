@@ -20,8 +20,7 @@
             "init.php"
         ],
         "psr-4": {
-            "Bolt\\Extension\\DanielKulbe\\GooglePlus\\": "",
-            "Bolt\\Extension\\DanielKulbe\\GooglePlus\\Controller\\": "src/"
+            "Bolt\\Extension\\DanielKulbe\\GooglePlus\\": ""
         }
     },
     "extra": {
