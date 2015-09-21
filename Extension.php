@@ -301,7 +301,7 @@ class Extension extends \Bolt\BaseExtension
             if ($this->config['files']) $twigValues = $this->localFiles($twigValues);
 
             $cache = $this->config['cache'] === true ? $this->cacheDuration() : 0;
-            $html = $this->app['render']->render($this->config['activity']['template'], $twigValues);
+            $html = $this->app['render']->render($this->config['activity']['template'], $twigValues)->__toString();
             $this->app['cache']->save($cachekey, $html, $cache);
 
             return $html;
