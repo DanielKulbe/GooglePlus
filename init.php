@@ -1,5 +1,5 @@
 <?php
 
-namespace Bolt\Extension\DanielKulbe\GooglePlus;
+use Bolt\Extension\DanielKulbe\GooglePlus\Extension;
 
 $app['extensions']->register(new Extension($app));

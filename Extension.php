@@ -3,14 +3,12 @@
 
 namespace Bolt\Extension\DanielKulbe\GooglePlus;
 
-use Bolt\Application;
-use Bolt\BaseExtension;
-use Bolt\Helpers\String;
 use Guzzle\Http\StaticClient as Client;
 use Guzzle\Http\Url as Url;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Response;
 
-class Extension extends BaseExtension
+class Extension extends \Bolt\BaseExtension
 {
     /**
      * Extension name
@@ -62,6 +60,17 @@ class Extension extends BaseExtension
 
 
     /**
+     * Get the extension's human readable name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return Extension::NAME;
+    }
+
+
+    /**
      * Add Twig settings in 'frontend' environment
      *
      * @return void
@@ -74,23 +83,15 @@ class Extension extends BaseExtension
         // Add theme template path (makes sure it is also available in async environment)
         $this->app['twig.loader.filesystem']->addPath($this->app['paths']['themepath']);
 
-        // Add widgets
-        $cache = $this->config['cache'] === true ? $this->cacheDuration() : 0;
-        $this->addWidget('googleplus', 'profile', 'googlePlusProfile', '', true, $cache);
-        $this->addWidget('googleplus', 'feed', 'googlePlusFeed', '', true, $cache);
+        // Set up the routes for the widgets
+        $this->app->match("/googleplus/{type}", array($this, 'renderWidget'));
+
+        // Add Javascript widget loader to frontend
+        if ($this->app['config']->getWhichEnd() == 'frontend') {
+            $this->addJavascript('assets/loader.js', array('late' => true, 'priority' => 1000));
+        }
 
         $this->runtime = time();
-    }
-
-
-    /**
-     * Get the extension's human readable name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return Extension::NAME;
     }
 
 
@@ -104,6 +105,7 @@ class Extension extends BaseExtension
         return array(
           # 'app_developer_key' => ''
             'cache' => true,
+            'defer' => true,
             'files' => false,
             'filedir' => 'googleplus',
             'profile' => array(
@@ -264,13 +266,21 @@ class Extension extends BaseExtension
      */
     public function googlePlusProfile ()
     {
-        $twigValues = $this->handleRequest('profile');
+        $cachekey= 'widget_gog_profile';
 
-        if ($this->config['files']) $twigValues = $this->localFiles($twigValues);
+        if ($this->app['cache']->contains($cachekey)) {
+            return $this->app['cache']->fetch($cachekey);
+        } else {
+            $twigValues = $this->handleRequest('profile');
 
-        $str = $this->app['render']->render($this->config['profile']['template'], $twigValues);
+            if ($this->config['files']) $twigValues = $this->localFiles($twigValues);
 
-        return new \Twig_Markup($str, 'UTF-8');
+            $cache = $this->config['cache'] === true ? $this->cacheDuration() : 0;
+            $html = $this->app['render']->render($this->config['profile']['template'], $twigValues);
+            $this->app['cache']->save($cachekey, $html, $cache);
+
+            return $html;
+        }
     }
 
     /**
@@ -280,12 +290,56 @@ class Extension extends BaseExtension
      */
     public function googlePlusFeed ()
     {
-        $twigValues = $this->handleRequest('activity');
+        $cachekey = 'widget_gog_feed';
 
-        if ($this->config['files']) $twigValues = $this->localFiles($twigValues);
+        if ($this->app['cache']->contains($cachekey)) {
+            return $this->app['cache']->fetch($cachekey);
+        } else {
+            $twigValues = $this->handleRequest('activity');
 
-        $str = $this->app['render']->render($this->config['activity']['template'], $twigValues);
+            if ($this->config['files']) $twigValues = $this->localFiles($twigValues);
+
+            $cache = $this->config['cache'] === true ? $this->cacheDuration() : 0;
+            $html = $this->app['render']->render($this->config['activity']['template'], $twigValues);
+            $this->app['cache']->save($cachekey, $html, $cache);
+
+            return $html;
+        }
+    }
+
+
+    /**
+     * Render the widget holder for Frontend
+     * @param  string $type Widgettype
+     * @return string       Rendered Twig Markup
+     */
+    public function renderWidgetHolder($type)
+    {
+        $str =  sprintf(
+            "<section><div class='widget-gog' id='widget-gog-%s' data-key='%s'%s>%s</div></section>",
+            $type,
+            $type,
+            !$this->config['defer'] ? '' : " data-defer='true'",
+            $this->config['defer'] ? '' : $this->{'googlePlus'.ucfirst($type)}()
+        );
 
         return new \Twig_Markup($str, 'UTF-8');
+    }
+
+
+    /**
+     * Render deferred Request
+     * @param  string $type Widgettype
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function renderWidget($type) {
+        $this->app['extensions']->clearSnippetQueue();
+        $this->app['extensions']->disableJquery();
+        $this->app['debugbar'] = false;
+
+        $body = $this->{'googlePlus'.ucfirst($type)}();
+
+        return new Response($body, Response::HTTP_OK, array('Cache-Control' => 's-maxage=180, public'));
     }
 }

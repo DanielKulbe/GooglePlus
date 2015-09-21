@@ -3,7 +3,7 @@
     "description": "Display your public Google+ activity and a profile information on your website.",
     "type": "bolt-extension",
     "keywords": [
-        "google", "feed", "activity", "social", "profile"
+        "google", "plus", "feed", "activity", "social", "profile", "widget"
     ],
     "license": "MIT",
     "authors": [
@@ -13,14 +13,15 @@
         }
     ],
     "require": {
-        "bolt/bolt": ">=2.0.0,<3.0.0"
+        "bolt/bolt": ">=2.2.0,<3.0.0"
     },
     "autoload": {
         "files": [
             "init.php"
         ],
         "psr-4": {
-            "Bolt\\Extension\\DanielKulbe\\GooglePlus\\": ""
+            "Bolt\\Extension\\DanielKulbe\\GooglePlus\\": "",
+            "Bolt\\Extension\\DanielKulbe\\GooglePlus\\Controller\\": "src/"
         }
     },
     "extra": {

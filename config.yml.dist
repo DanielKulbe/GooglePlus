@@ -6,6 +6,7 @@ app_developer_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 # Enable caching of requests
 cache: true
+defer: true
 
 # Enable file (image) attachment uploads (e.g. to create thumbnail)
 files: false
