@@ -86,8 +86,9 @@ class Extension extends \Bolt\BaseExtension
         // Set up the routes for the widgets
         $this->app->match("/googleplus/{type}", array($this, 'renderWidget'));
 
-        // Add Javascript widget loader to frontend
+        // Add Javascript widget Twig function and loader to frontend
         if ($this->app['config']->getWhichEnd() == 'frontend') {
+            $this->addTwigFunction('googlewidget', 'renderWidgetHolder');
             $this->addJavascript('assets/loader.js', array('late' => true, 'priority' => 1000));
         }
 
