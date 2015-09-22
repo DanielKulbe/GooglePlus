@@ -3,6 +3,7 @@
 
 namespace Bolt\Extension\DanielKulbe\GooglePlus;
 
+use Bolt\Translation\Translator as Trans;
 use Guzzle\Http\StaticClient as Client;
 use Guzzle\Http\Url as Url;
 use Symfony\Component\Filesystem\Filesystem;
@@ -10,25 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Extension extends \Bolt\BaseExtension
 {
-    /**
-     * Extension name
-     *
-     * @var string
-     */
+    // @const string  Extension name
     const NAME = 'Google+';
-
-    /**
-     * API base URL
-     *
-     * @var string
-     */
+    // @const string  API base URL
     const API = 'https://www.googleapis.com/plus/v1/people';
-
-    /**
-     * API cUrl request options
-     *
-     * @var array
-     */
+    // @var array     API cUrl request options
     private static $curl_options = array(
         CURLOPT_CONNECTTIMEOUT => 20,
         CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31',
@@ -38,20 +25,10 @@ class Extension extends \Bolt\BaseExtension
         CURLOPT_SSL_VERIFYPEER => 0,
         CURLOPT_SSL_VERIFYHOST => 0
     );
-
-    /**
-     * Runtime, for to compare with local files time.
-     *
-     * @var int
-     */
+    // @var int       Runtime, for to compare with local files time.
     private $runtime;
-
-    /**
-     * Allowed file formats for saveFile()
-     *
-     * @see http://php.net/manual/en/image.constants.php
-     * @var array
-     */
+    // @var array     Allowed file formats for saveFile()
+    // @see http://php.net/manual/en/image.constants.php
     private static $fileFormats = array(
         '.jpg' => IMAGETYPE_JPEG,
         '.png' => IMAGETYPE_PNG,
@@ -68,7 +45,6 @@ class Extension extends \Bolt\BaseExtension
     {
         return Extension::NAME;
     }
-
 
     /**
      * Add Twig settings in 'frontend' environment
@@ -95,7 +71,6 @@ class Extension extends \Bolt\BaseExtension
         $this->runtime = time();
     }
 
-
     /**
      * Set the defaults for configuration parameters
      *
@@ -121,7 +96,6 @@ class Extension extends \Bolt\BaseExtension
         );
     }
 
-
     /**
      * Get the duration (in seconds) for the cache.
      *
@@ -136,12 +110,10 @@ class Extension extends \Bolt\BaseExtension
         return intval($duration) * 60;
     }
 
-
     /**
      * Save external files to filesystem
      *
      * @param  $url string
-     *
      * @return string
      */
     protected function saveFile ($url)
@@ -181,12 +153,10 @@ class Extension extends \Bolt\BaseExtension
         return $url;
     }
 
-
     /**
      * Replace external file urls with local paths
      *
      * @param  $values array
-     *
      * @return array
      */
     protected function localFiles (array $values = array())
@@ -208,18 +178,15 @@ class Extension extends \Bolt\BaseExtension
                         $values['record']['items'][$key]['object']['attachments'][$a_key]['image']['url'] = $this->saveFile($a_item['image']['url']);
                 }
             }
-
         }
 
         return $values;
     }
 
-
     /**
      * Retrieve a fully response object from Google+ API Service.
      *
      * @param  $method  string
-     *
      * @return mixed
      */
     protected function handleRequest($method = 'profile')
@@ -259,7 +226,6 @@ class Extension extends \Bolt\BaseExtension
         return $export;
     }
 
-
     /**
      * Render the Google+ profile box
      *
@@ -271,17 +237,17 @@ class Extension extends \Bolt\BaseExtension
 
         if ($this->app['cache']->contains($cachekey)) {
             return $this->app['cache']->fetch($cachekey);
-        } else {
-            $twigValues = $this->handleRequest('profile');
-
-            if ($this->config['files']) $twigValues = $this->localFiles($twigValues);
-
-            $cache = $this->config['cache'] === true ? $this->cacheDuration() : 0;
-            $html = $this->app['render']->render($this->config['profile']['template'], $twigValues)->__toString();
-            $this->app['cache']->save($cachekey, $html, $cache);
-
-            return $html;
         }
+
+        $twigValues = $this->handleRequest('profile');
+
+        if ($this->config['files']) $twigValues = $this->localFiles($twigValues);
+
+        $cache = $this->config['cache'] === true ? $this->cacheDuration() : 0;
+        $html = $this->app['render']->render($this->config['profile']['template'], $twigValues)->__toString();
+        $this->app['cache']->save($cachekey, $html, $cache);
+
+        return $html;
     }
 
     /**
@@ -295,24 +261,24 @@ class Extension extends \Bolt\BaseExtension
 
         if ($this->app['cache']->contains($cachekey)) {
             return $this->app['cache']->fetch($cachekey);
-        } else {
-            $twigValues = $this->handleRequest('activity');
-
-            if ($this->config['files']) $twigValues = $this->localFiles($twigValues);
-
-            $cache = $this->config['cache'] === true ? $this->cacheDuration() : 0;
-            $html = $this->app['render']->render($this->config['activity']['template'], $twigValues)->__toString();
-            $this->app['cache']->save($cachekey, $html, $cache);
-
-            return $html;
         }
-    }
 
+        $twigValues = $this->handleRequest('activity');
+
+        if ($this->config['files']) $twigValues = $this->localFiles($twigValues);
+
+        $cache = $this->config['cache'] === true ? $this->cacheDuration() : 0;
+        $html = $this->app['render']->render($this->config['activity']['template'], $twigValues)->__toString();
+        $this->app['cache']->save($cachekey, $html, $cache);
+
+        return $html;
+    }
 
     /**
      * Render the widget holder for Frontend
-     * @param  string $type Widgettype
-     * @return string       Rendered Twig Markup
+     *
+     * @param  string $type  Widgettype
+     * @return \Twig_Markup  Rendered Twig Markup
      */
     public function renderWidgetHolder($type)
     {
@@ -327,11 +293,10 @@ class Extension extends \Bolt\BaseExtension
         return new \Twig_Markup($str, 'UTF-8');
     }
 
-
     /**
      * Render deferred Request
-     * @param  string $type Widgettype
      *
+     * @param  string $type Widgettype
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function renderWidget($type) {
@@ -339,8 +304,11 @@ class Extension extends \Bolt\BaseExtension
         $this->app['extensions']->disableJquery();
         $this->app['debugbar'] = false;
 
-        $body = $this->{'googlePlus'.ucfirst($type)}();
-
-        return new Response($body, Response::HTTP_OK, array('Cache-Control' => 's-maxage=180, public'));
+        if (true === $this->app['request']->isXmlHttpRequest() && 'GET' == $this->app['request']->getMethod()) {
+            $body = $this->{'googlePlus'.ucfirst($type)}();
+            return new Response($body, Response::HTTP_OK, array('Cache-Control' => 's-maxage=180, public'));
+        } else {
+            return new Response(Trans::__('Permission denied'), Response::HTTP_FORBIDDEN);
+        }
     }
 }

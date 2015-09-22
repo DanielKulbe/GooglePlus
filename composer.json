@@ -13,7 +13,8 @@
         }
     ],
     "require": {
-        "bolt/bolt": ">=2.2.0,<3.0.0"
+        "bolt/bolt": ">=2.2.0,<3.0.0",
+        "php" : ">=5.3"
     },
     "autoload": {
         "files": [
@@ -24,6 +25,7 @@
         }
     },
     "extra": {
-        "bolt-assets": "assets"
+        "bolt-assets": "assets",
+        "bolt-icon": "assets/g+icon_red.jpg"
     }
 }
