@@ -12,6 +12,12 @@
             "email": "info@daniel-kulbe.de"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "http://gitlab.daniel-kulbe.de/root/bolt-google-plus.git"
+        }
+    ],
     "require": {
         "bolt/bolt": ">=2.2.0,<3.0.0",
         "php" : ">=5.3"
