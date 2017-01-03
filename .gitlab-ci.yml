@@ -1,6 +1,0 @@
-daniel-kulbe.de:
-  script:
-    - 'sudo /var/www/hostLC/priv/deploy.sh'
-  type: deploy
-  only:
-    - tags
