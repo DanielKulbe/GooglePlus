@@ -15,7 +15,11 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "http://gitlab.daniel-kulbe.de/root/bolt-google-plus.git"
+            "url": "git@bitbucket.org:danielkulbe/bolt-googleplus.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:DanielKulbe/GooglePlus.git"
         }
     ],
     "require": {
