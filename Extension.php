@@ -118,12 +118,14 @@ class Extension extends \Bolt\BaseExtension
      */
     protected function saveFile ($url)
     {
+        list($width, $height, $type, $attr) = getimagesize($url);
+
         if (false === $ext = array_search(
-            getimagesize($url)[2], // safe for external URLs
+            $type, // safe for external URLs
             Extension::$fileFormats,
             true
         )) {
-            $this->app['logger.system']->warning("[GooglePlus]: saveFile() remote file '{$url}' has an invalid format.", ['event' => 'extension']);
+            $this->app['logger.system']->warning("[GooglePlus]: saveFile() remote file '{$url}' has an invalid format (".$type.").", ['event' => 'extension']);
         } else {
             $basename = sprintf('/%s/%s', $this->config['filedir'], hash('sha1', $url).$ext);
             $filename = sprintf(
